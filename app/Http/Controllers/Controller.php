@@ -12,6 +12,7 @@ use Illuminate\Routing\Controller as BaseController;
  *      title="Notes - тестовый проект",
  *      version="1.0.0",
  *      description="API управления заметками",
+ *
  *      @OA\Contact(
  *          email="postnikov.sa@ya.ru",
  *          name="Stanislav"

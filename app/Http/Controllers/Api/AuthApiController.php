@@ -17,34 +17,46 @@ class AuthApiController extends Controller
      *      tags={"Пользователи"},
      *      summary="Регистрация нового пользователя",
      *      description="Регистрирует нового пользователя с предоставленным именем, email и паролем.",
+     *
      *      @OA\RequestBody(
      *          required=true,
+     *
      *          @OA\JsonContent(
      *              required={"name", "email", "password"},
+     *
      *              @OA\Property(property="name", type="string", example="John Doe"),
      *              @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *              @OA\Property(property="password", type="string", format="password", example="password123"),
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=201,
      *          description="Пользователь успешно зарегистрирован",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="success", type="boolean", example=true),
      *              @OA\Property(property="data", ref="/docs/swagger.yaml#/components/schemas/User")
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=422,
      *          description="Ошибка валидации",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="error", type="object", example={"email": {"The email has already been taken."}})
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=500,
      *          description="Ошибка сервера",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="error", type="string", example="Internal Server Error")
      *          )
      *      )
@@ -73,41 +85,52 @@ class AuthApiController extends Controller
         }
     }
 
-
     /**
      * @OA\Post(
      *      path="/api/login",
      *      tags={"Пользователи"},
      *      summary="Авторизация пользователя",
      *      description="Авторизует пользователя на основе предоставленных учетных данных и выдает токен для дальнейшего взаимодействия",
+     *
      *      @OA\RequestBody(
      *          required=true,
+     *
      *          @OA\JsonContent(
      *              required={"email", "password"},
+     *
      *              @OA\Property(property="email", type="string", format="email", example="john@example.com"),
      *              @OA\Property(property="password", type="string", format="password", example="password123")
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Успешная авторизация",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="success", type="boolean", example=true),
      *              @OA\Property(property="data", type="string", example="Успешная авторизация"),
      *              @OA\Property(property="token", type="string")
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=401,
      *          description="Неправильные учетные данные",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="error", type="string", example="Неправильные учетные данные")
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=500,
      *          description="Ошибка сервера",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="error", type="string", example="Internal Server Error")
      *          )
      *      )
@@ -132,7 +155,7 @@ class AuthApiController extends Controller
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], $e->getCode());
         }
     }
