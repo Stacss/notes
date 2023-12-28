@@ -9,6 +9,24 @@ use Illuminate\Validation\ValidationException;
 
 class NoteUpdateService
 {
+    public function store($validatedData)
+    {
+        try {
+            $user = Auth::user();
+            $note = new Note([
+                'title' => $validatedData['title'],
+                'content' => $validatedData['content'],
+            ]);
+            $user->notes()->save($note);
+
+            return response()->json(['success' => true, 'data' => $note], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => 'Переданы некорректные данные.', 'details' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Внутренняя ошибка сервера: '.$e->getMessage()], 500);
+        }
+    }
+
     public function update($id, $validatedData)
     {
         try {
