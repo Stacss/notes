@@ -9,6 +9,12 @@ use Illuminate\Validation\ValidationException;
 
 class NoteUpdateService
 {
+    /**
+     * Создает новую заметку на основе валидированных данных.
+     *
+     * @param array $validatedData Проверенные и валидные данные для создания заметки.
+     * @return \Illuminate\Http\JsonResponse JSON-ответ с результатом операции создания новой заметки.
+     */
     public function store($validatedData)
     {
         try {
@@ -27,6 +33,13 @@ class NoteUpdateService
         }
     }
 
+    /**
+     * Обновляет заметку на основе переданных валидированных данных.
+     *
+     * @param int $id Идентификатор заметки, которую необходимо обновить.
+     * @param array $validatedData Проверенные и валидные данные для обновления заметки.
+     * @return \Illuminate\Http\JsonResponse JSON-ответ с результатом операции обновления заметки.
+     */
     public function update($id, $validatedData)
     {
         try {
