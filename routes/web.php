@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\Web\NoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return redirect()->route('home');
 });
 
 Auth::routes();
 
-Route::get('/home', [\App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');
-Route::middleware('auth')->put('/notes/{id}/update', [\App\Http\Controllers\Web\NoteController::class, 'update'])->name('update.note');
+Route::middleware('auth')->get('/home', [\App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->put('/notes/{id}/update', [NoteController::class, 'update'])->name('update.note');
+Route::middleware('auth')->post('/notes/add', [NoteController::class, 'storeAjax'])->name('add.note');
+Route::middleware('auth')->post('/notes', [NoteController::class, 'store'])->name('create.note');
+Route::middleware('auth')->get('/notes/create', [NoteController::class, 'create'])->name('create.notes');
 
