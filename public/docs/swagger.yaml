@@ -6,16 +6,47 @@ components:
         id:
           type: integer
           format: int64
+          description: Уникальный идентификатор пользователя
         name:
           type: string
+          description: Имя пользователя
         email:
           type: string
           format: email
+          description: Электронная почта пользователя
         password:
           type: string
+          description: Пароль пользователя
         created_at:
           type: string
           format: date-time
+          description: Дата и время создания записи
         updated_at:
           type: string
           format: date-time
+          description: Дата и время обновления записи
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор заметки
+        user_id:
+          type: integer
+          format: int64
+          description: Идентификатор пользователя, создавшего заметку
+        title:
+          type: string
+          description: Заголовок заметки
+        content:
+          type: string
+          description: Содержание заметки
+        created_at:
+          type: string
+          format: date-time
+          description: Дата и время создания заметки
+        updated_at:
+          type: string
+          format: date-time
+          description: Дата и время обновления заметки
