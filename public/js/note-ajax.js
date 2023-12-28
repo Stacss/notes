@@ -15,7 +15,7 @@ $(document).ready(function() {
                     var noteId = response.data.id;
                     var newTitle = response.data.title;
 
-                    $(`li[data-note-id="${noteId}"]`).text(newTitle);
+                    $(`button[data-note-id="${noteId}"]`).text(newTitle);
 
                     var alertMessage = $('<div class="alert alert-success" role="alert">Запись изменена</div>');
 
