@@ -32,7 +32,7 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
-Использование
+## Использование
 Запустите веб-сервер:
 ```
 php artisan serve
@@ -45,7 +45,9 @@ php artisan serve
 
 ### Технологии
 Laravel - PHP-фреймворк
+
 Bootstrap - фреймворк для фронтенда
+
 MySQL - система управления базами данных
 
 ## API и документация Swagger
@@ -67,4 +69,5 @@ PUT /api/notes/{id}: Обновить заметку
 DELETE /api/notes/{id}: Удалить заметку
 
 Лицензия
+
 Этот проект лицензирован по лицензии [MIT License]
