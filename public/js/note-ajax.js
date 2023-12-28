@@ -1,6 +1,6 @@
 // Функция обработки отправки формы редактирования заметки
 $(document).ready(function() {
-    $('.edit-form').on('submit', function(e) {
+    $(document).on('submit', '.edit-form', function(e) {
         e.preventDefault();
 
         var formData = $(this).serialize();
