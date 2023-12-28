@@ -146,14 +146,105 @@ class NoteApiController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Put(
+     *      path="/api/notes/{id}",
+     *      tags={"Notes"},
+     *      summary="Обновить заметку",
+     *      description="Обновляет информацию о заметке.",
+     *      security={ {"sanctum": {} }},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          description="ID заметки",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"title", "content"},
+     *              @OA\Property(property="title", type="string", maxLength=255, example="Новый заголовок"),
+     *              @OA\Property(property="content", type="string", example="Новый контент заметки")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Успешное обновление",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="success", type="boolean", example=true),
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="/docs/swagger.yaml#/components/schemas/Note"
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Не авторизован",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Unauthenticated.")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Запрещено",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Недостаточно прав для обновления этой заметки")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Запись не найдена",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Запись не найдена")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Ошибка валидации",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Ошибка валидации")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Внутренняя ошибка сервера",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Внутренняя ошибка сервера")
+     *          )
+     *      )
+     * )
      */
     public function update(Request $request, $id)
     {
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+            ]);
+
+            $note = Note::findOrFail($id);
+
+            $user = $request->user();
+
+            if ($note->user_id !== $user->id) {
+                return response()->json(['error' => 'Недостаточно прав для обновления этой заметки'], 403);
+            }
+
+            $note->title = $validatedData['title'];
+            $note->content = $validatedData['content'];
+            $note->save();
+
+            return response()->json(['success' => true, 'data' => $note], 200);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => 'Ошибка валидации: ' . $e->getMessage()], 422);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Запись не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Внутренняя ошибка сервера: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
