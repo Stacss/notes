@@ -15,8 +15,8 @@
                         <div class="list-group">
                             @foreach($notes as $note)
                                 <button class="list-group-item list-group-item-action" data-toggle="modal"
-                                    data-target="#editNoteModal{{ $note->id }}"
-                                    data-note-id="{{ $note->id }}">{{ $note->title }}</button>
+                                        data-target="#editNoteModal{{ $note->id }}"
+                                        data-note-id="{{ $note->id }}">{{ $note->title }}</button>
 
                                 <!-- Модальное окно для редактирования -->
                                 <div class="modal fade" id="editNoteModal{{ $note->id }}" tabindex="-1" role="dialog"
@@ -66,7 +66,8 @@
             Добавить заметку
         </button>
         <!-- Модальное окно для добавления новой заметки -->
-        <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="addNoteModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -76,7 +77,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- Форма для добавления новой заметки -->
                         <form id="addNoteForm" action="{{ route('add.note') }}" method="POST">
                             @csrf
                             <div class="form-group">
@@ -97,5 +97,6 @@
 @endsection
 @push('js')
     <script src="{{ asset('js/note-ajax.js') }}"></script>
+    <script src="{{ asset('js/add-note-ajax.js') }}"></script>
 @endpush
 
