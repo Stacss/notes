@@ -197,6 +197,12 @@ return [
                     'in' => 'header', // The location of the API key. Valid values are "query" or "header".
                 ],
                 */
+                'sanctum' => [
+                    'type' => 'http',
+                    'description' => 'Laravel Sanctum token authentication',
+                    'scheme' => 'bearer',
+                    'bearerFormat' => 'JWT'
+                ],
             ],
             'security' => [
                 /*
