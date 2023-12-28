@@ -201,7 +201,7 @@ return [
                     'type' => 'http',
                     'description' => 'Laravel Sanctum token authentication',
                     'scheme' => 'bearer',
-                    'bearerFormat' => 'JWT'
+                    'bearerFormat' => 'JWT',
                 ],
             ],
             'security' => [

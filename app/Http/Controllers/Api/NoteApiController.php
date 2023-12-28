@@ -16,30 +16,40 @@ class NoteApiController extends Controller
      *      summary="Получить все заметки пользователя",
      *      description="Отображает список всех заметок, принадлежащих зарегистрированному пользователю.",
      *      security={{ "sanctum": {} }},
+     *
      *      @OA\Response(
      *          response=200,
      *          description="Успешный ответ",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="success", type="boolean", example=true),
      *              @OA\Property(
      *                  property="data",
      *                  type="array",
+     *
      *                  @OA\Items(ref="/docs/swagger.yaml#/components/schemas/Note")
      *              )
      *          )
      *      ),
      *     security={ {"sanctum": {} }},
+     *
      *      @OA\Response(
      *          response=401,
      *          description="Не авторизован",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="error", type="string", example="Unauthenticated.")
      *          )
      *      ),
+     *
      *      @OA\Response(
      *          response=500,
      *          description="Внутренняя ошибка сервера",
+     *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="error", type="string", example="Внутренняя ошибка сервера: Server Error")
      *          )
      *      )
@@ -53,9 +63,9 @@ class NoteApiController extends Controller
 
             return response()->json(['success' => true, 'data' => $notes], 200);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Ошибка: ' . $e->getMessage()], 404);
+            return response()->json(['error' => 'Ошибка: '.$e->getMessage()], 404);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Внутренняя ошибка сервера: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Внутренняя ошибка сервера: '.$e->getMessage()], 500);
         }
     }
 
