@@ -22,7 +22,7 @@ class NoteApiController extends Controller
     /**
      * @OA\Get(
      *      path="/api/notes",
-     *      tags={"Notes"},
+     *      tags={"Заметки"},
      *      summary="Получить все заметки пользователя",
      *      description="Отображает список всех заметок, принадлежащих зарегистрированному пользователю.",
      *      security={{ "sanctum": {} }},
@@ -82,7 +82,7 @@ class NoteApiController extends Controller
     /**
      * @OA\Post(
      *      path="/api/notes",
-     *      tags={"Notes"},
+     *      tags={"Заметки"},
      *      summary="Создать новую заметку",
      *      description="Создаёт новую заметку для авторизованного пользователя.",
      *      security={{ "sanctum": {} }},
@@ -157,7 +157,7 @@ class NoteApiController extends Controller
     /**
      * @OA\Put(
      *      path="/api/notes/{id}",
-     *      tags={"Notes"},
+     *      tags={"Заметки"},
      *      summary="Обновить заметку",
      *      description="Обновляет информацию о заметке.",
      *      security={ {"sanctum": {} }},
@@ -262,7 +262,7 @@ class NoteApiController extends Controller
     /**
      * @OA\Delete(
      *      path="/api/notes/{id}",
-     *      tags={"Notes"},
+     *      tags={"Заметки"},
      *      summary="Удалить заметку",
      *      description="Удаляет заметку пользователя.",
      *      security={ {"sanctum": {} }},
