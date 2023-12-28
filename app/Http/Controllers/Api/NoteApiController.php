@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Note;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class NoteApiController extends Controller
 {
@@ -70,12 +72,66 @@ class NoteApiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Post(
+     *      path="/api/notes",
+     *      tags={"Notes"},
+     *      summary="Создать новую заметку",
+     *      description="Создаёт новую заметку для авторизованного пользователя.",
+     *      security={{ "sanctum": {} }},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"title", "content"},
+     *              @OA\Property(property="title", type="string", maxLength=255, example="Название заметки"),
+     *              @OA\Property(property="content", type="string", example="Содержание заметки")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Заметка успешно создана",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="success", type="boolean", example=true),
+     *              @OA\Property(property="data", ref="/docs/swagger.yaml#/components/schemas/Note")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Ошибка валидации",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Переданы некорректные данные."),
+     *              @OA\Property(property="details", type="object", example={"title": {"The title field is required."}})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Внутренняя ошибка сервера",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Внутренняя ошибка сервера: Server Error")
+     *          )
+     *      )
+     * )
      */
     public function store(Request $request)
     {
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+            ]);
+
+            $user = $request->user();
+            $note = new Note([
+                'title' => $validatedData['title'],
+                'content' => $validatedData['content'],
+            ]);
+            $user->notes()->save($note);
+
+            return response()->json(['success' => true, 'data' => $note], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => 'Переданы некорректные данные.', 'details' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Внутренняя ошибка сервера: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
