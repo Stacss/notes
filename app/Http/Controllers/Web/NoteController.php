@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Note;
 use App\Services\NoteUpdateService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\ValidationException;
 
 class NoteController extends Controller
 {
@@ -22,9 +19,10 @@ class NoteController extends Controller
     /**
      * Обновляет существующую заметку.
      *
-     * @param \Illuminate\Http\Request $request Запрос, содержащий данные для обновления заметки.
-     * @param int $id Идентификатор (ID) существующей заметки, которую необходимо обновить.
-     * @return \Illuminate\Http\JsonResponse JSON-ответ с результатом операции обновления заметки.
+     * @param Request $request запрос, содержащий данные для обновления заметки
+     * @param int     $id      идентификатор (ID) существующей заметки, которую необходимо обновить
+     *
+     * @return \Illuminate\Http\JsonResponse JSON-ответ с результатом операции обновления заметки
      */
     public function update(Request $request, $id)
     {
@@ -39,8 +37,9 @@ class NoteController extends Controller
     /**
      * Создает новую заметку через AJAX-запрос.
      *
-     * @param \Illuminate\Http\Request $request Запрос, содержащий данные для создания заметки.
-     * @return \Illuminate\Http\JsonResponse JSON-ответ с результатом операции создания новой заметки.
+     * @param Request $request запрос, содержащий данные для создания заметки
+     *
+     * @return \Illuminate\Http\JsonResponse JSON-ответ с результатом операции создания новой заметки
      */
     public function storeAjax(Request $request)
     {
@@ -55,8 +54,9 @@ class NoteController extends Controller
     /**
      * Создает новую заметку на основе данных из запроса.
      *
-     * @param \Illuminate\Http\Request $request Запрос, содержащий данные для создания заметки.
-     * @return \Illuminate\Http\RedirectResponse Перенаправляет на домашнюю страницу с уведомлением о успешном создании заметки.
+     * @param Request $request запрос, содержащий данные для создания заметки
+     *
+     * @return \Illuminate\Http\RedirectResponse перенаправляет на домашнюю страницу с уведомлением о успешном создании заметки
      */
     public function store(Request $request)
     {
@@ -80,11 +80,10 @@ class NoteController extends Controller
     /**
      * Отображает форму для создания новой заметки.
      *
-     * @return \Illuminate\View\View Представление для создания новой заметки.
+     * @return \Illuminate\View\View представление для создания новой заметки
      */
     public function create()
     {
         return view('note.create');
     }
-
 }

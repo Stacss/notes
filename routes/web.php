@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Web\NoteController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Web\NoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +25,3 @@ Route::middleware('auth')->put('/notes/{id}/update', [NoteController::class, 'up
 Route::middleware('auth')->post('/notes/add', [NoteController::class, 'storeAjax'])->name('add.note');
 Route::middleware('auth')->post('/notes', [NoteController::class, 'store'])->name('create.note');
 Route::middleware('auth')->get('/notes/create', [NoteController::class, 'create'])->name('create.notes');
-
