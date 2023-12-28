@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Note;
+use App\Services\NoteUpdateService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,13 @@ use Illuminate\Validation\ValidationException;
 
 class NoteApiController extends Controller
 {
+    protected $noteUpdateService;
+
+    public function __construct(NoteUpdateService $noteUpdateService)
+    {
+        $this->noteUpdateService = $noteUpdateService;
+    }
+
     /**
      * @OA\Get(
      *      path="/api/notes",
@@ -147,17 +155,6 @@ class NoteApiController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    }
-
-    /**
      * @OA\Put(
      *      path="/api/notes/{id}",
      *      tags={"Notes"},
@@ -254,32 +251,12 @@ class NoteApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $validatedData = $request->validate([
-                'title' => 'required|string|max:255',
-                'content' => 'required|string',
-            ]);
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
 
-            $note = Note::findOrFail($id);
-
-            $user = $request->user();
-
-            if ($note->user_id !== $user->id) {
-                return response()->json(['error' => 'Недостаточно прав для обновления этой заметки'], 403);
-            }
-
-            $note->title = $validatedData['title'];
-            $note->content = $validatedData['content'];
-            $note->save();
-
-            return response()->json(['success' => true, 'data' => $note], 200);
-        } catch (ValidationException $e) {
-            return response()->json(['error' => 'Ошибка валидации: '.$e->getMessage()], 422);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Запись не найдена'], 404);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Внутренняя ошибка сервера: '.$e->getMessage()], 500);
-        }
+        return $this->noteUpdateService->update($id, $validatedData);
     }
 
     /**
