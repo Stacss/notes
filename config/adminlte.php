@@ -319,8 +319,8 @@ return [
         ],*/
         ['header' => 'МОИ ЗАПИСКИ'],
         [
-            'text' => ' Все записки',
-            'url' => 'admin/settings',
+            'text' => 'Добавить записку',
+            'route' => 'create.notes',
             'icon' => 'far fa-sticky-note',
         ],
        /* [
