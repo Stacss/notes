@@ -28,4 +28,38 @@ class NoteController extends Controller
 
         return $this->noteUpdateService->update($id, $validatedData);
     }
+
+    public function storeAjax(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        return $this->noteUpdateService->store($validatedData);
+    }
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $user = $request->user();
+
+        $note = new Note([
+            'title' => $validatedData['title'],
+            'content' => $validatedData['content'],
+        ]);
+
+        $user->notes()->save($note);
+
+        return redirect()->route('home')->with('status', 'Заметка успешно создана');
+    }
+
+    public function create()
+    {
+        return view('note.create');
+    }
+
 }
