@@ -248,13 +248,81 @@ class NoteApiController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @OA\Delete(
+     *      path="/api/notes/{id}",
+     *      tags={"Notes"},
+     *      summary="Удалить заметку",
+     *      description="Удаляет заметку пользователя.",
+     *      security={ {"sanctum": {} }},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          description="ID заметки",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Успешное удаление",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="success", type="boolean", example=true),
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example="Заметка успешно удалена"
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Не авторизован",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Unauthenticated.")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Запрещено",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Недостаточно прав для удаления этой заметки")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Запись не найдена",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Запись не найдена")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Внутренняя ошибка сервера",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="error", type="string", example="Внутренняя ошибка сервера")
+     *          )
+     *      )
+     * )
      */
     public function destroy($id)
     {
+        try {
+            $note = Note::findOrFail($id);
+
+            $user = auth()->user();
+
+            if ($note->user_id !== $user->id) {
+                return response()->json(['error' => 'Недостаточно прав для удаления этой заметки'], 403);
+            }
+
+            $note->delete();
+
+            return response()->json(['success' => true, 'message' => 'Заметка успешно удалена'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Запись не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Внутренняя ошибка сервера: ' . $e->getMessage()], 500);
+        }
     }
 }
