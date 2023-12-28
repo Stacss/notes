@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [\App\Http\Controllers\Web\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->put('/notes/{id}/update', [\App\Http\Controllers\Web\NoteController::class, 'update'])->name('update.note');
+
